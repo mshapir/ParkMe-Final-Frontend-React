@@ -3,8 +3,8 @@ import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
 
 class SocialLogin extends Component {
-
   facebookCallback = (response) => {
+    console.log(response);
     if (response.hasOwnProperty('userID')) {
       this.props.updateUser(response)
     } else {
@@ -13,6 +13,8 @@ class SocialLogin extends Component {
   }
 
   googleSuccessCallback = (response) => {
+    console.log(response);
+    console.log(response.profileObj);
     this.props.updateUser(response)
   }
 
@@ -24,7 +26,7 @@ class SocialLogin extends Component {
     return (
       <div>
         <div style={{ textAlign: 'center', padding: '15px' }}>
-          <FacebookLogin appId="1216271218534578" autoLoad={true} fields="name,email,picture" callback={this.facebookCallback} />
+          <FacebookLogin appId="1216271218534578" autoLoad={false} fields="name,email,picture" callback={this.facebookCallback} />
         </div>
         <div style={{ textAlign: 'center', padding: '15px' }}>
           <GoogleLogin
