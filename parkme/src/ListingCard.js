@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import styles from './styles/listingCardstyling'
@@ -23,6 +24,10 @@ class ListingCard extends React.Component {
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
+  };
+
+  bookListing = (event, listing) => {
+    console.log(event, listing);
   };
 
   render() {
@@ -60,6 +65,9 @@ class ListingCard extends React.Component {
           <IconButton aria-label="Share">
             <ShareIcon />
           </IconButton>
+          <IconButton aria-label="Book" onClick={() => this.bookListing(this.props.listing)}>
+            <TimeToLeaveIcon />
+          </IconButton>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -73,7 +81,6 @@ class ListingCard extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Method:</Typography>
             <Typography paragraph>
               {this.props.listing.description}
             </Typography>
