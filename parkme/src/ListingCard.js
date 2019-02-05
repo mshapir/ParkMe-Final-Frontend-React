@@ -29,7 +29,7 @@ class ListingCard extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
       <Card className={classes.card}>
         <CardHeader
           avatar={
