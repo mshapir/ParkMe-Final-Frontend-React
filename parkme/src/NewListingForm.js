@@ -7,7 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import styles from './styles/newListingFormStyling'
 import InputAdornment from '@material-ui/core/InputAdornment'
-
+import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
 
 const locations = [
   {
@@ -53,13 +54,15 @@ class NewListingForm extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div style={{ textAlign: 'center', maxWidth: 250, paddingLeft: '200px' }}>
-      <h2>Create a new listing!</h2>
-      <form className={classes.container} noValidate autoComplete="off">
+      <div className={classes.container}>
+        <form noValidate autoComplete="off">
+        <Typography component="h4" variant="h3">
+          Create a new listing!
+        </Typography>
         <TextField
           id="outlined-title"
           label="Title"
-          name='title'
+          name="title"
           className={classes.textField}
           value={this.state.title}
           onChange={this.handleChange}
@@ -70,7 +73,7 @@ class NewListingForm extends React.Component {
         <TextField
           id="outlined-title"
           label="Image Url"
-          name='image'
+          name="image"
           className={classes.textField}
           value={this.state.image}
           onChange={this.handleChange}
@@ -94,7 +97,7 @@ class NewListingForm extends React.Component {
           id="outlined-number"
           label="Price"
           value={this.state.price}
-          name='price'
+          name="price"
           onChange={this.handleChange}
           type="number"
           className={classes.textField}
@@ -141,7 +144,6 @@ class NewListingForm extends React.Component {
         onClick={this.handleNewListing}>
           Create
         </Button>
-
       </form>
       </div>
     );
