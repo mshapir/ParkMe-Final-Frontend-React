@@ -15,6 +15,7 @@ import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button'
 import {Link} from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
+import { positions } from '@material-ui/system';
 
 const styles = {
   root: {
@@ -55,7 +56,7 @@ class MenuAppBar extends React.Component {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
-    
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -72,23 +73,24 @@ class MenuAppBar extends React.Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               ParkMe
             </Typography>
-            { this.props.user.id ? <div><Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}>
-            <Button color="inherit">Listings</Button>
-            </Link>
-            <Button color="inherit">{this.state.auth ? 'My Listings' : 'My Reservations'}</Button>
-            {this.state.auth ? <Link to={'/newlisting'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Create Listing</Button> </Link> : ''}
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch checked={auth} onChange={this.handleChange} aria-label="LoginSwitch" />
-                }
-                label={auth ? 'Admin' : 'User'}
-              />
-              <Button color="inherit" onClick={(e) => this.props.logout(e)}>Log Out</Button>
-            </FormGroup> </div> : <div>
+            <div style={{ display: this.props.user.id ? 'inline-flex' : 'none', width: '100%', paddingLeft: '820px'}}>
+              <FormGroup row>
+                <FormControlLabel control={<Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Listings</Button></Link>} />
+                <FormControlLabel control={<Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">{this.state.auth ? 'My Listings' : 'My Reservations'}</Button></Link>} />
+                {this.state.auth ? <FormControlLabel control={<Link to={'/newlisting'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Create Listing</Button> </Link>} /> : ''}
+                <FormControlLabel
+                  control={
+                    <Switch checked={auth} onChange={this.handleChange} aria-label="LoginSwitch" />
+                  }
+                  label={auth ? 'Admin' : 'User'}
+                />
+                <FormControlLabel control={<Button color="inherit" onClick={(e) => this.props.logout(e)}>Log Out</Button>} />
+              </FormGroup>
+            </div>
+            <div style={{ display: !this.props.user.id ? '' : 'none' }}>
              <Link to='/signup'><Button color="inherit" style={{ textDecoration: 'none', color: 'white' }}>Sign Up</Button></Link>
              <Link to='/login'><Button color="inherit" style={{ textDecoration: 'none', color: 'white' }}>Login</Button></Link>
-             </div>}
+             </div>
             {this.state.user.id && (
               <div>
                 <IconButton
