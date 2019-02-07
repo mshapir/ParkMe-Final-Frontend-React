@@ -1,34 +1,65 @@
 import React, { Component } from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
 import MenuAppBar from './MenuAppBar.js'
 import Login from './Login.js'
 import SocialLogin from './SocialLogin.js'
 import SignUp from './SignUp.js'
 import Home from './Home.js'
 import NewListingForm from './NewListingForm.js'
-import ListingGrid from './ListingGrid'
+import Loading from './Loading'
 
 class App extends Component {
   state={
     listings: [],
-    user: null,
+    user: [],
     isLoggedIn: false
   }
 
   componentDidMount(){
-    this.fetchAllListings()
+      this.getCurrentUser()
+      this.fetchAllListings()
   }
+
 
   updateUser = (user) => {
     this.setState({
-      user,
+      user: user,
       isLoggedIn: true
+    }, () =>  {
+      // debugger
+      this.props.history.push('/home')
     })
   }
 
+
+  getCurrentUser = () => {
+    let token = localStorage.getItem("token")
+    return fetch('http://localhost:3001/api/v1/users/current_user',{
+      method: 'GET',
+      headers: {
+        Authorization: `${token}`
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+        console.log(data)
+        this.setState({
+          user: data
+        })
+    })
+  }
+
+  handleLogout = (e) => {
+    localStorage.clear()
+      this.setState({
+        user: [],
+        isLoggedIn: false
+      })
+  }
+
   fetchAllListings = () => {
-    let token = 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NTE4MjY0NDIsImlzcyI6Imlzc3Vlcl9uYW1lIiwiYXVkIjoiY2xpZW50IiwidXNlcl9pZCI6MX0.UbJoxikOQ2FOgxKa808v8GBjNPGMYA1L1fpJA6FykS4'
-    fetch('http://localhost:3001/api/v1/listings/', {
+    let token = localStorage.getItem("token")
+    return fetch('http://localhost:3001/api/v1/listings/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -37,6 +68,7 @@ class App extends Component {
     })
     .then(r => r.json())
     .then(data => {
+      console.log(data);
       this.setState({
         listings: data
       })
@@ -47,7 +79,7 @@ class App extends Component {
     console.log(this.state.listings);
     return (
       <div>
-        <MenuAppBar user={this.state.user} isLoggedIn={this.state.isLoggedIn} />
+        <MenuAppBar user={this.state.user} logout={this.handleLogout} isLoggedIn={this.state.isLoggedIn}/>
         <Switch>
 
         <Route
@@ -57,13 +89,13 @@ class App extends Component {
 
         <Route
         path='/signup'
-        render={() => (<SignUp updateUser={this.updateUser}/>)}
+        render={() => (<SignUp updateUser={this.updateUser} getCurrentUser={this.getCurrentUser}/>)}
         />
         <Route
         path='/login'
         render={() => (
           <div>
-          <Login updateUser={this.updateUser}/>
+          <Login updateUser={this.updateUser} getCurrentUser={this.getCurrentUser} />
           <SocialLogin updateUser={this.updateUser}/>
           </div> )}
         />
@@ -71,7 +103,7 @@ class App extends Component {
         path='/home'
         render={() => (
           <div>
-          <Home listings={this.state.listings}/>
+          <Home listings={this.state.listings} user={this.state.user} isLoggedIn={this.state.isLoggedIn}/>
           </div> )}
         />
         </Switch>
@@ -80,6 +112,4 @@ class App extends Component {
   }
 }
 
-export default App;
-
-// {this.state.isLoggedIn ? <div><Login updateUser={this.updateUser}/><SocialLogin updateUser={this.updateUser}/></div> : <div> <SignUp updateUser={this.updateUser}/> </div>}
+export default withRouter(App);

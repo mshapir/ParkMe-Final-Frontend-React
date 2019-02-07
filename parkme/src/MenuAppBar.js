@@ -34,10 +34,9 @@ const styles = {
 
 class MenuAppBar extends React.Component {
   state = {
-    auth: true,
+    auth: false,
     anchorEl: null,
     user: this.props.user,
-    isLoggedIn: this.props.isLoggedIn
   };
 
   handleChange = event => {
@@ -56,7 +55,7 @@ class MenuAppBar extends React.Component {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
-
+    
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -73,7 +72,7 @@ class MenuAppBar extends React.Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               ParkMe
             </Typography>
-            <Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}>
+            { this.props.user.id ? <div><Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}>
             <Button color="inherit">Listings</Button>
             </Link>
             <Button color="inherit">{this.state.auth ? 'My Listings' : 'My Reservations'}</Button>
@@ -85,8 +84,12 @@ class MenuAppBar extends React.Component {
                 }
                 label={auth ? 'Admin' : 'User'}
               />
-            </FormGroup>
-            {this.state.isLoggedIn && (
+              <Button color="inherit" onClick={(e) => this.props.logout(e)}>Log Out</Button>
+            </FormGroup> </div> : <div>
+             <Link to='/signup'><Button color="inherit" style={{ textDecoration: 'none', color: 'white' }}>Sign Up</Button></Link>
+             <Link to='/login'><Button color="inherit" style={{ textDecoration: 'none', color: 'white' }}>Login</Button></Link>
+             </div>}
+            {this.state.user.id && (
               <div>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
