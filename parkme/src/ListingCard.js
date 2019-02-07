@@ -11,14 +11,12 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import styles from './styles/listingCardstyling'
-
+import styles from './styles/listingCardstyling';
+import BookListingButton from './BookListingButton';
 
 class ListingCard extends React.Component {
   state = { expanded: false };
@@ -27,12 +25,6 @@ class ListingCard extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-<<<<<<< HEAD
-  bookListing = (event, listing) => {
-    console.log(event, listing);
-  };
-
-=======
   bookListing = (listing) => {
     let token = localStorage.getItem("token")
     fetch('http://localhost:3001/api/v1/reservations', {
@@ -53,7 +45,6 @@ class ListingCard extends React.Component {
   };
 
 
->>>>>>> master
   render() {
     const { classes } = this.props;
     return (
@@ -88,9 +79,7 @@ class ListingCard extends React.Component {
           <IconButton aria-label="Share">
             <ShareIcon />
           </IconButton>
-          <IconButton aria-label="Book" onClick={() => this.bookListing(this.props.listing)}>
-            <TimeToLeaveIcon />
-          </IconButton>
+          <BookListingButton listing={this.props.listing} />
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
