@@ -46,7 +46,8 @@ class Login extends React.Component {
         alert(data.error)
       } else {
         alert(`Welcome ${data.user.username}`)
-        this.props.updateUser(data)
+        console.log(data);
+        this.props.updateUser(data.user)
         localStorage.setItem("token", data.token)
       }
     })

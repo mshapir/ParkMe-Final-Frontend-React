@@ -11,6 +11,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -25,9 +26,28 @@ class ListingCard extends React.Component {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
+  bookListing = (listing) => {
+    let token = localStorage.getItem("token")
+    fetch('http://localhost:3001/api/v1/reservations', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`
+      },
+      body: JSON.stringify({
+        listing_id: listing.id,
+        user_id: this.props.user.id
+      })
+    })
+    .then(r => r.json())
+    .then(data => {
+      alert(`You Booked ${listing.title}`)
+    })
+  };
+
+
   render() {
     const { classes } = this.props;
-
     return (
       <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
       <Card className={classes.card}>
@@ -41,7 +61,7 @@ class ListingCard extends React.Component {
             </IconButton>
           }
           title={this.props.listing.title}
-          subheader={this.props.listing.location}
+          subheader={`${this.props.listing.location} - $${this.props.listing.price}`}
         />
         <CardMedia
           className={classes.media}
@@ -59,6 +79,9 @@ class ListingCard extends React.Component {
           </IconButton>
           <IconButton aria-label="Share">
             <ShareIcon />
+          </IconButton>
+          <IconButton aria-label="Book" onClick={() => this.bookListing(this.props.listing)}>
+            <TimeToLeaveIcon />
           </IconButton>
           <IconButton
             className={classnames(classes.expand, {
