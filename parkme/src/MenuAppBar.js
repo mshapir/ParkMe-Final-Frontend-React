@@ -55,7 +55,7 @@ class MenuAppBar extends React.Component {
     const { classes } = this.props;
     const { auth, anchorEl } = this.state;
     const open = Boolean(anchorEl);
-    
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -75,7 +75,7 @@ class MenuAppBar extends React.Component {
             { this.props.user.id ? <div><Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}>
             <Button color="inherit">Listings</Button>
             </Link>
-            <Button color="inherit">{this.state.auth ? 'My Listings' : 'My Reservations'}</Button>
+            {this.state.auth ? <Button color="inherit">My Listings</Button> : <Link to={'/reservations'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">My Reservations</Button></Link>}
             {this.state.auth ? <Link to={'/newlisting'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Create Listing</Button> </Link> : ''}
             <FormGroup>
               <FormControlLabel
