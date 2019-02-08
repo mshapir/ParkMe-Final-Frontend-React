@@ -14,9 +14,9 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import styles from './styles/listingCardstyling';
 import BookListingButton from './BookListingButton';
+import AdminActionsButton from './AdminActionsButton';
 
 class ListingCard extends React.Component {
   state = { expanded: false };
@@ -55,9 +55,7 @@ class ListingCard extends React.Component {
             <Avatar aria-label="ParkMe Listing" className={classes.avatar} src={require("./logo.png")} />
           }
           action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
+            <AdminActionsButton listing={this.props.listing} />
           }
           title={this.props.listing.title}
           subheader={`${this.props.listing.location} - $${this.props.listing.price}`}

@@ -81,7 +81,6 @@ class BookListingButton extends React.Component {
               onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
               focusedInput={this.state.focusedInput} // PropTypes.bool
               onFocusChange={({ focusedInput }) => {console.log(focusedInput); this.setState({ focusedInput: focusedInput || 'startDate' })}} // PropTypes.func.isRequired
-              id="datePicker" // PropTypes.string.isRequired,
               numberOfMonths={1}
             />
           </DialogContent>
