@@ -8,12 +8,6 @@ import Button from '@material-ui/core/Button';
 import styles from './styles/newListingFormStyling'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Typography from '@material-ui/core/Typography';
-<<<<<<< HEAD
-import Fab from '@material-ui/core/Fab';
-=======
-
-
->>>>>>> master
 
 const locations = [
   {
@@ -79,17 +73,10 @@ class NewListingForm extends React.Component {
 
     return (
       <div className={classes.container}>
-<<<<<<< HEAD
         <form noValidate autoComplete="off">
         <Typography component="h4" variant="h3">
           Create a new listing!
         </Typography>
-=======
-      <form noValidate autoComplete="off">
-      <Typography component="h4" variant="h3">
-      Create a new listing!
-      </Typography>
->>>>>>> master
         <TextField
           id="outlined-title"
           label="Title"

@@ -7,12 +7,14 @@ import SignUp from './SignUp.js'
 import Home from './Home.js'
 import NewListingForm from './NewListingForm.js'
 import Loading from './Loading'
+import MyReservations from './MyReservations';
 
 class App extends Component {
   state={
     listings: [],
     user: [],
-    isLoggedIn: false
+    isLoggedIn: false,
+    reservations: []
   }
 
   componentDidMount(){
@@ -27,15 +29,18 @@ class App extends Component {
       isLoggedIn: true
     }, () =>  {
       // debugger
+      this.fetchAllListings()
+      this.getReservations()
       this.props.history.push('/home')
     })
   }
 
 
+
   getCurrentUser = () => {
     let token = localStorage.getItem("token")
     return fetch('http://localhost:3001/api/v1/users/current_user',{
-      method: 'GET',
+      method: 'POST',
       headers: {
         Authorization: `${token}`
       }
@@ -45,7 +50,7 @@ class App extends Component {
         console.log(data)
         this.setState({
           user: data
-        })
+        }, this.getReservations)
     })
   }
 
@@ -54,11 +59,30 @@ class App extends Component {
       this.setState({
         user: [],
         isLoggedIn: false
+      }, () => this.props.history.push('/home'))
+  }
+
+  getReservations = () => {
+    let token = localStorage.getItem("token")
+    fetch(`http://localhost:3001/api/v1/users/${this.state.user.id}/reservations`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log(data);
+      this.setState({
+        reservations: data
       })
+    })
   }
 
   fetchAllListings = () => {
     let token = localStorage.getItem("token")
+    console.log(token);
     return fetch('http://localhost:3001/api/v1/listings/', {
       method: 'GET',
       headers: {
@@ -76,11 +100,16 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.listings);
+    console.log(this.state.reservations, 'app');
     return (
       <div>
         <MenuAppBar user={this.state.user} logout={this.handleLogout} isLoggedIn={this.state.isLoggedIn}/>
         <Switch>
+
+        <Route
+        path='/reservations'
+        render={() => (<MyReservations reservations={this.state.reservations}/>)}
+        />
 
         <Route
         path='/newlisting'
