@@ -5,7 +5,7 @@ import Loading from './Loading'
 class Home extends React.Component {
 
   render() {
-    if (this.props.user.id) {
+    if (!this.props.user.id) {
       return (<div><ListingCont listings={this.props.listings} user={this.props.user}/></div>)
     }else {
       return (<Loading />)

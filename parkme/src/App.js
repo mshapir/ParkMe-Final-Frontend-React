@@ -8,6 +8,10 @@ import Home from './Home.js'
 import NewListingForm from './NewListingForm.js'
 import Loading from './Loading'
 import MyReservations from './MyReservations';
+import 'react-dates/initialize';
+import ThemedStyleSheet from 'react-with-styles/lib/ThemedStyleSheet';
+import aphroditeInterface from 'react-with-styles-interface-aphrodite';
+import DefaultTheme from 'react-dates/lib/theme/DefaultTheme';
 
 class App extends Component {
   state={
@@ -140,5 +144,23 @@ class App extends Component {
     );
   }
 }
+
+ThemedStyleSheet.registerInterface(aphroditeInterface);
+ThemedStyleSheet.registerTheme({
+  reactDates: {
+    ...DefaultTheme.reactDates,
+    color: {
+      ...DefaultTheme.reactDates.color,
+      highlighted: {
+        backgroundColor: '#82E0AA',
+        backgroundColor_active: '#58D68D',
+        backgroundColor_hover: '#58D68D',
+        color: '#186A3B',
+        color_active: '#186A3B',
+        color_hover: '#186A3B',
+      },
+    },
+  },
+});
 
 export default withRouter(App);
