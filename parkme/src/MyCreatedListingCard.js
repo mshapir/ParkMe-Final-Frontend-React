@@ -11,40 +11,46 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import TimeToLeaveIcon from '@material-ui/icons/TimeToLeave';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import styles from './styles/listingCardstyling'
 
+const styles = theme => ({
+  card: {
+    maxWidth: 400,
+    maxHeight: 600,
+    minWidth: 400,
+    minHeight: 400,
+    padding: '10px',
+    margin: '10px'
+  },
+  media: {
+    height: 0,
+    paddingTop: '56.25%', // 16:9
+  },
+  actions: {
+    display: 'flex',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+});
 
-class ListingCard extends React.Component {
+class MyCreatedListingCard extends React.Component {
   state = { expanded: false };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  bookListing = (listing) => {
-    let token = localStorage.getItem("token")
-    fetch('http://localhost:3001/api/v1/reservations', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${token}`
-      },
-      body: JSON.stringify({
-        listing_id: listing.id,
-        user_id: this.props.user.id
-      })
-    })
-    .then(r => r.json())
-    .then(data => {
-      alert(`You Booked ${listing.title}`)
-      this.props.updateReservations(data)
-    })
-  };
 
 
   render() {
@@ -55,7 +61,7 @@ class ListingCard extends React.Component {
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="ParkMe Listing" className={classes.avatar} src={require("./logo.png")} />
+            <Avatar aria-label="ParkMe Reservation" className={classes.avatar} src={require("./logo.png")} />
           }
           action={
             <IconButton>
@@ -82,9 +88,6 @@ class ListingCard extends React.Component {
           <IconButton aria-label="Share">
             <ShareIcon />
           </IconButton>
-          <IconButton aria-label="Book" onClick={() => this.bookListing(this.props.listing)}>
-            <TimeToLeaveIcon />
-          </IconButton>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -98,9 +101,9 @@ class ListingCard extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>Reviews:</Typography>
+            <Typography paragraph>Method:</Typography>
             <Typography paragraph>
-              {this.props.listing.review}
+              {this.props.listing.description}
             </Typography>
           </CardContent>
         </Collapse>
@@ -110,8 +113,8 @@ class ListingCard extends React.Component {
   }
 }
 
-ListingCard.propTypes = {
+MyCreatedListingCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ListingCard);
+export default withStyles(styles)(MyCreatedListingCard);

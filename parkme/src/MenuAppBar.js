@@ -75,7 +75,7 @@ class MenuAppBar extends React.Component {
             { this.props.user.id ? <div><Link to={'/home'} style={{ textDecoration: 'none', color: 'white' }}>
             <Button color="inherit">Listings</Button>
             </Link>
-            {this.state.auth ? <Button color="inherit">My Listings</Button> : <Link to={'/reservations'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">My Reservations</Button></Link>}
+            {this.state.auth ? <Link to={'/mylistings'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">My Listings</Button> </Link>: <Link to={'/reservations'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">My Reservations</Button></Link>}
             {this.state.auth ? <Link to={'/newlisting'} style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Create Listing</Button> </Link> : ''}
             <FormGroup>
               <FormControlLabel

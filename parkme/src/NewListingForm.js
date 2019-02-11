@@ -61,18 +61,18 @@ class NewListingForm extends React.Component {
         description: this.state.description,
         location: this.state.location,
         price: this.state.price,
-        user_id: 1
+        user_id: this.props.user.id
       })
     })
     .then(r => r.json())
     .then(data => {
       alert(`Created ${data.title}`)
+      this.props.updateListings(data)
     })
   }
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className={classes.container}>
       <form noValidate autoComplete="off">
