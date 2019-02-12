@@ -37,6 +37,11 @@ class App extends Component {
     })
   }
 
+  updateReviews = () => {
+    this.fetchAllListings()
+    this.props.history.push('/home')
+  }
+
   updateListings = (listing) => {
     let listings = [...this.state.listings, listing]
     this.setState({
@@ -150,7 +155,7 @@ class App extends Component {
 
         <Route
         path='/reservations'
-        render={() => (<MyReservations reservations={this.state.reservations} deleteReservation={this.deleteReservation}/>)}
+        render={() => (<MyReservations reservations={this.state.reservations} deleteReservation={this.deleteReservation} user={this.state.user} updateReviews={this.updateReviews}/>)}
         />
 
         <Route

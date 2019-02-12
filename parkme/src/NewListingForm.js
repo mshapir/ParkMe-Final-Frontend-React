@@ -132,7 +132,7 @@ class NewListingForm extends React.Component {
         />
         {"\n"}
         <TextField
-          id="outlined-select-currency"
+          id="outlined-select-location"
           select
           label="Loaction"
           name="location"

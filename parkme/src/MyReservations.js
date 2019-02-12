@@ -8,7 +8,7 @@ class MyReservations extends Component {
       <div>
       <h2> My Reserved Parking Spots </h2>
       <div>{this.props.reservations.map(reservation => {
-        return <ReservationCard key={reservation.id} reservation={reservation} deleteReservation={this.props.deleteReservation}/>
+        return <ReservationCard key={reservation.id} reservation={reservation} deleteReservation={this.props.deleteReservation} user={this.props.user} updateReviews={this.props.updateReviews}/>
       })}</div>
       </div>
     );

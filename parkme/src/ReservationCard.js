@@ -16,6 +16,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import HighlightOff from '@material-ui/icons/HighlightOff';
+import ReviewModal from './ReviewModal';
 
 const styles = theme => ({
   card: {
@@ -46,10 +47,17 @@ const styles = theme => ({
 });
 
 class ReservationCard extends React.Component {
-  state = { expanded: false };
+  state = {
+    expanded: false,
+    reviewModal: false
+  };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
+  };
+
+  handleModal = () => {
+    this.setState({reviewModal: !this.state.reviewModal})
   };
 
   deletReservation = (reservation) => {
@@ -75,6 +83,7 @@ class ReservationCard extends React.Component {
 
     return (
       <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
+      {this.state.reviewModal  ? <ReviewModal reviewModal={this.handleModal} listing={this.props.reservation.listing} user={this.props.user} updateReviews={this.props.updateReviews}/> : ''}
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -99,7 +108,7 @@ class ReservationCard extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
+          <IconButton aria-label="Add to favorites" onClick={this.handleModal}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="Share">
