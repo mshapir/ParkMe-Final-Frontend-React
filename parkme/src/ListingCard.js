@@ -54,6 +54,7 @@ class ListingCard extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.listing);
     return (
       <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
       <Card className={classes.card}>

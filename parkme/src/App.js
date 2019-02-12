@@ -29,7 +29,6 @@ class App extends Component {
       user: user,
       isLoggedIn: true
     }, () =>  {
-      // debugger
       this.fetchAllListings()
       this.getReservations()
       this.getMyListings()
@@ -88,7 +87,7 @@ class App extends Component {
       this.setState({
         user: [],
         isLoggedIn: false
-      }, () => this.props.history.push('/home'))
+      }, () => this.props.history.push('/login'))
   }
 
   getMyListings = () => {
@@ -143,6 +142,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.listings);
     return (
       <div>
         <MenuAppBar user={this.state.user} logout={this.handleLogout} isLoggedIn={this.state.isLoggedIn}/>
