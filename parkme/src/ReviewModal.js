@@ -45,9 +45,14 @@ class ReviewModal extends React.Component {
       })
     })
     .then(r => r.json())
-    .then(() => {
-      alert('Thank you! Review Submitted!')
-      this.props.updateReviews()
+    .then((data) => {
+      if (data.hasOwnProperty('errors')) {
+        alert(`${data.errors}`)
+      } else {
+        alert('Thank you! Review Submitted!')
+        this.props.updateReviews()
+
+      }
     })
   }
 

@@ -66,8 +66,12 @@ class NewListingForm extends React.Component {
     })
     .then(r => r.json())
     .then(data => {
-      alert(`Created ${data.title}`)
-      this.props.updateListings(data)
+      if (data.hasOwnProperty('errors')) {
+        alert(`${data.errors}`)
+      } else {
+        alert(`Created ${data.title}`)
+        this.props.updateListings(data)
+      }
     })
   }
 
