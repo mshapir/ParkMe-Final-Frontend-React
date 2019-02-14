@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -42,7 +41,7 @@ class SignUp extends React.Component {
         alert(`${data.errors}`)
       }else {
         localStorage.setItem("token", data.token)
-        this.props.updateUser(data)
+        this.props.updateUser(data.user)
         alert(`User ${data.user.username} was created`)
       }
     })

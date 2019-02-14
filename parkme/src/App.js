@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import {Route, Switch, Redirect, withRouter} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 import MenuAppBar from './MenuAppBar.js'
 import Login from './Login.js'
 import SocialLogin from './SocialLogin.js'
 import SignUp from './SignUp.js'
 import Home from './Home.js'
 import NewListingForm from './NewListingForm.js'
-import Loading from './Loading'
 import MyReservations from './MyReservations';
 import 'react-dates/initialize';
 import ThemedStyleSheet from 'react-with-styles/lib/ThemedStyleSheet';
-import aphroditeInterface from 'react-with-styles-interface-aphrodite';
 import DefaultTheme from 'react-dates/lib/theme/DefaultTheme';
+import MyCreatedListings from './MyCreatedListings';
 
 class App extends Component {
   state={
     listings: [],
     user: [],
     isLoggedIn: false,
-    reservations: []
+    reservations: [],
+    myListings: []
   }
 
   componentDidMount(){
@@ -32,13 +32,38 @@ class App extends Component {
       user: user,
       isLoggedIn: true
     }, () =>  {
-      // debugger
       this.fetchAllListings()
       this.getReservations()
+      this.getMyListings()
       this.props.history.push('/home')
     })
   }
 
+  updateReviews = () => {
+    this.fetchAllListings()
+    this.props.history.push('/home')
+  }
+
+  updateListings = (listing) => {
+    let listings = [...this.state.listings, listing]
+    this.setState({
+      listings
+    }, () => this.props.history.push('/home'))
+  }
+
+  updateReservations = (reservation) => {
+    let reservations = [...this.state.reservations, reservation]
+    this.setState({
+      reservations
+    }, () => this.props.history.push('/reservations'))
+  }
+
+  deleteReservation = (reservationObj) => {
+    let reservations = [...this.state.reservations].filter(reservation => reservation !== reservationObj)
+    this.setState({
+      reservations
+    })
+  }
 
 
   getCurrentUser = () => {
@@ -51,10 +76,12 @@ class App extends Component {
     })
     .then(r => r.json())
     .then(data => {
-        console.log(data)
         this.setState({
           user: data
-        }, this.getReservations)
+        }, () => {
+          this.getReservations()
+          this.getMyListings()
+        })
     })
   }
 
@@ -63,7 +90,24 @@ class App extends Component {
       this.setState({
         user: [],
         isLoggedIn: false
-      }, () => this.props.history.push('/home'))
+      }, () => this.props.history.push('/login'))
+  }
+
+  getMyListings = () => {
+    let token = localStorage.getItem("token")
+    fetch(`http://localhost:3001/api/v1/users/${this.state.user.id}/listings`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `${token}`
+      }
+    })
+    .then(r => r.json())
+    .then(data => {
+      this.setState({
+        myListings: data
+      })
+    })
   }
 
   getReservations = () => {
@@ -77,7 +121,6 @@ class App extends Component {
     })
     .then(r => r.json())
     .then(data => {
-      console.log(data);
       this.setState({
         reservations: data
       })
@@ -86,7 +129,6 @@ class App extends Component {
 
   fetchAllListings = () => {
     let token = localStorage.getItem("token")
-    console.log(token);
     return fetch('http://localhost:3001/api/v1/listings/', {
       method: 'GET',
       headers: {
@@ -96,7 +138,6 @@ class App extends Component {
     })
     .then(r => r.json())
     .then(data => {
-      console.log(data);
       this.setState({
         listings: data
       })
@@ -104,20 +145,25 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.reservations, 'app');
+    console.log(this.state.listings);
     return (
       <div>
         <MenuAppBar user={this.state.user} logout={this.handleLogout} isLoggedIn={this.state.isLoggedIn}/>
         <Switch>
 
         <Route
+        path='/mylistings'
+        render={() => (<MyCreatedListings myListings={this.state.myListings} />)}
+        />
+
+        <Route
         path='/reservations'
-        render={() => (<MyReservations reservations={this.state.reservations}/>)}
+        render={() => (<MyReservations reservations={this.state.reservations} deleteReservation={this.deleteReservation} user={this.state.user} updateReviews={this.updateReviews}/>)}
         />
 
         <Route
         path='/newlisting'
-        render={() => (<NewListingForm />)}
+        render={() => (<NewListingForm user={this.state.user} updateListings={this.updateListings}/>)}
         />
 
         <Route
@@ -136,7 +182,7 @@ class App extends Component {
         path='/home'
         render={() => (
           <div>
-          <Home listings={this.state.listings} user={this.state.user} isLoggedIn={this.state.isLoggedIn}/>
+          <Home listings={this.state.listings} user={this.state.user} isLoggedIn={this.state.isLoggedIn} updateReservations={this.updateReservations}/>
           </div> )}
         />
         </Switch>
@@ -145,7 +191,6 @@ class App extends Component {
   }
 }
 
-ThemedStyleSheet.registerInterface(aphroditeInterface);
 ThemedStyleSheet.registerTheme({
   reactDates: {
     ...DefaultTheme.reactDates,

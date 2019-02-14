@@ -15,8 +15,6 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import HighlightOff from '@material-ui/icons/HighlightOff';
-import ReviewModal from './ReviewModal';
 
 const styles = theme => ({
   card: {
@@ -46,35 +44,12 @@ const styles = theme => ({
   },
 });
 
-class ReservationCard extends React.Component {
-  state = {
-    expanded: false,
-    reviewModal: false
-  };
+class MyCreatedListingCard extends React.Component {
+  state = { expanded: false };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
-
-  handleModal = () => {
-    this.setState({reviewModal: !this.state.reviewModal})
-  };
-
-  deletReservation = (reservation) => {
-    console.log(reservation.id);
-    let token = localStorage.getItem("token")
-    fetch(`http://localhost:3001/api/v1/reservations/${reservation.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${token}`
-      }
-    })
-    .then(r => r.json())
-    .then(data => {
-      this.props.deleteReservation(reservation)
-    })
-  }
 
 
 
@@ -83,7 +58,6 @@ class ReservationCard extends React.Component {
 
     return (
       <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
-      {this.state.reviewModal  ? <ReviewModal reviewModal={this.handleModal} listing={this.props.reservation.listing} user={this.props.user} updateReviews={this.props.updateReviews}/> : ''}
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -94,28 +68,25 @@ class ReservationCard extends React.Component {
               <MoreVertIcon />
             </IconButton>
           }
-          title={this.props.reservation.listing.title}
-          subheader={`${this.props.reservation.listing.location} - $${this.props.reservation.listing.price}`}
+          title={this.props.listing.title}
+          subheader={`${this.props.listing.location} - $${this.props.listing.price}`}
         />
         <CardMedia
           className={classes.media}
-          image={this.props.reservation.listing.image}
-          title={this.props.reservation.listing.title}
+          image={this.props.listing.image}
+          title={this.props.listing.title}
         />
         <CardContent>
           <Typography component="p">
-            {this.props.reservation.listing.description}
+            {this.props.listing.description}
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" onClick={this.handleModal}>
+          <IconButton aria-label="Add to favorites">
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="Share">
             <ShareIcon />
-          </IconButton>
-          <IconButton aria-label="Delete" onClick={() => this.deletReservation(this.props.reservation)}>
-            <HighlightOff />
           </IconButton>
           <IconButton
             className={classnames(classes.expand, {
@@ -132,7 +103,7 @@ class ReservationCard extends React.Component {
           <CardContent>
             <Typography paragraph>Method:</Typography>
             <Typography paragraph>
-              {this.props.reservation.listing.description}
+              {this.props.listing.description}
             </Typography>
           </CardContent>
         </Collapse>
@@ -142,8 +113,8 @@ class ReservationCard extends React.Component {
   }
 }
 
-ReservationCard.propTypes = {
+MyCreatedListingCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ReservationCard);
+export default withStyles(styles)(MyCreatedListingCard);

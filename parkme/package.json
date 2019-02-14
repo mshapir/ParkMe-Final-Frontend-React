@@ -5,9 +5,9 @@
   "dependencies": {
     "@material-ui/core": "^3.9.1",
     "@material-ui/icons": "^3.0.2",
-    "aphrodite": "^2.2.3",
+    "material-ui-rating": "^2.0.0",
     "react": "^16.7.0",
-    "react-dates": "^19.0.1",
+    "react-dates": "^19.0.3",
     "react-dom": "^16.7.0",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.0.0",

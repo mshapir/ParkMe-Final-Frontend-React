@@ -14,16 +14,20 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import styles from './styles/listingCardstyling';
 import BookListingButton from './BookListingButton';
 import AdminActionsButton from './AdminActionsButton';
+import Reviews from './Reviews';
+import styles from './styles/listingCardstyling';
 
 class ListingCard extends React.Component {
-  state = { expanded: false };
+  state = {
+    expanded: false
+  };
 
   handleExpandClick = () => {
     this.setState(state => ({ expanded: !state.expanded }));
   };
+
 
   bookListing = (listing) => {
     let token = localStorage.getItem("token")
@@ -41,12 +45,14 @@ class ListingCard extends React.Component {
     .then(r => r.json())
     .then(data => {
       alert(`You Booked ${listing.title}`)
+      this.props.updateReservations(data)
     })
   };
 
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.listing);
     return (
       <div style={{ display: 'inline-flex', paddingLeft: '25px' }}>
       <Card className={classes.card}>
@@ -91,8 +97,11 @@ class ListingCard extends React.Component {
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent>
+            <Typography paragraph>Reviews</Typography>
             <Typography paragraph>
-              {this.props.listing.description}
+               {this.props.listing.reviews.map(review => {
+                 return <Reviews key={review.id} review={review} />
+               })}
             </Typography>
           </CardContent>
         </Collapse>
@@ -107,3 +116,8 @@ ListingCard.propTypes = {
 };
 
 export default withStyles(styles)(ListingCard);
+
+
+// {this.props.listing.reviews.map(review => review.comment )}
+// <br />
+// {this.props.listing.reviews.map(review => review.rating )}

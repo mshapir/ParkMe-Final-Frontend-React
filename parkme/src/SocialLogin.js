@@ -6,16 +6,49 @@ class SocialLogin extends Component {
   facebookCallback = (response) => {
     console.log(response);
     if (response.hasOwnProperty('userID')) {
-      this.props.updateUser(response)
+      fetch('http://localhost:3001/api/v1/users/social_login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: response.name,
+          username: response.email,
+          password: response.id
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        localStorage.setItem("token", data.token)
+        this.props.updateUser(data.user)
+      })
     } else {
       alert(response.error)
     }
   }
 
   googleSuccessCallback = (response) => {
-    console.log(response);
     console.log(response.profileObj);
-    this.props.updateUser(response)
+    if (response.profileObj.hasOwnProperty('googleId')) {
+      fetch('http://localhost:3001/api/v1/users/social_login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: response.profileObj.givenName,
+          username: response.profileObj.email,
+          password: response.profileObj.googleId
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        localStorage.setItem("token", data.token)
+        this.props.updateUser(data.user)
+      })
+    } else {
+      alert(response.error)
+    }
   }
 
   googleFailureCallback = (response) => {
